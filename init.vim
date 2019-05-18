@@ -38,7 +38,6 @@ highlight Normal ctermfg=White
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 let &colorcolumn="80,".join(range(120,999),",")
 
-let anyfold_activate=1
 set foldlevel=10
 
 " Map the leader key to SPACE
