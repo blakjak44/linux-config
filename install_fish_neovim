@@ -16,7 +16,7 @@ sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/m
 sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/functions/fish_prompt_git.fish > fish_prompt_git.fish
 
 # NEOVIM
-apt-get install neovim
+yes | apt-get install neovim
 sudo -u $user mkdir $HOME/.config/nvim
 sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/init.vim > $HOME/.config/nvim/init.vim
 sudo -u $user curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
