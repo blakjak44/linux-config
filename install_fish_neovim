@@ -5,9 +5,9 @@
 user="$1"
 
 # FISH
-yes | apt-add-repository ppa:fish-shell/release-3
+apt-add-repository ppa:fish-shell/release-3
 apt-get update
-apt-get install fish
+yes | apt-get install fish
 cd $HOME/.config/fish
 sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/config.fish > config.fish
 sudo -u $user mkdir functions
