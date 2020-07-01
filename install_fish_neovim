@@ -1,0 +1,35 @@
+# This script must be run with sudo privileges
+# "python3" command must be available
+
+# Specify the user to install under
+user="$1"
+
+# FISH
+yes | apt-add-repository ppa:fish-shell/release-3
+apt-get update
+apt-get install fish
+cd $HOME/.config/fish
+sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/config.fish > config.fish
+sudo -u $user mkdir functions
+cd functions
+sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/functions/fish_prompt.fish > fish_prompt.fish
+sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/functions/fish_prompt_git.fish > fish_prompt_git.fish
+
+# NEOVIM
+apt-get install neovim
+sudo -u $user mkdir $HOME/.config/nvim
+sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/init.vim > $HOME/.config/nvim/init.vim
+sudo -u $user curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+sudo -u $user nvim +'PlugInstall --sync' +qa
+cd $HOME/.config/nvim/plugged
+sudo -u $user git clone https://github.com/Valloric/YouCompleteMe
+cd YouCompleteMe
+sudo -u $user git submodule update --init --recursive
+yes | apt install nodejs npm
+yes | apt install build-essential cmake python3-dev
+sudo -u $user python3 install.py --clang-completer --ts-completer
+
+rm $(which vi)
+ln -s /usr/bin/nvim /usr/bin/vi
+
+chsh -s /usr/bin/fish $user
