@@ -25,7 +25,6 @@ Plug '~/.config/nvim/plugged/YouCompleteMe'
 call plug#end()
 
 set background=dark
-colorscheme vimbrant
 let python_highlight_all = 1
 
 set nu
