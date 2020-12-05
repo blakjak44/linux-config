@@ -33,7 +33,6 @@ map <F3> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<
 
 " Color/Syntax settings
 set background=dark
-colorscheme vimbrant
 let g:semshi#excluded_hl_groups = ['local', 'builtin']
 let g:semshi#no_default_builtin_highlight = v:false
 function CustomHighlights()
