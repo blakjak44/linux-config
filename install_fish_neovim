@@ -3,6 +3,7 @@
 
 # Specify the user to install under
 user="$1"
+home=$(eval echo ~$user)
 
 echo Installing for user: $user
 
@@ -10,24 +11,24 @@ echo Installing for user: $user
 apt-add-repository ppa:fish-shell/release-3 -y
 apt-get update
 apt-get install fish -y
-sudo -u $user mkdir $HOME/.config
-sudo -u $user mkdir $HOME/.config/fish
-sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/config.fish > $HOME/.config/fish/config.fish
-sudo -u $user mkdir $HOME/.config/fish/functions
-sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/functions/fish_prompt.fish > $HOME/.config/fish/functions/fish_prompt.fish
-sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/functions/fish_prompt_git.fish > $HOME/.config/fish/functions/fish_prompt_git.fish
+sudo -u $user mkdir $home/.config
+sudo -u $user mkdir $home/.config/fish
+sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/config.fish > $home/.config/fish/config.fish
+sudo -u $user mkdir $home/.config/fish/functions
+sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/functions/fish_prompt.fish > $home/.config/fish/functions/fish_prompt.fish
+sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/functions/fish_prompt_git.fish > $home/.config/fish/functions/fish_prompt_git.fish
 
 # NEOVIM
 add-apt-repository ppa:neovim-ppa/stable -y
 apt-get update
 apt-get install neovim -y
-sudo -u $user mkdir $HOME/.config/nvim
-sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/init.vim > $HOME/.config/nvim/init.vim
-sudo -u $user curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+sudo -u $user mkdir $home/.config/nvim
+sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/init.vim > $home/.config/nvim/init.vim
+sudo -u $user curl -fLo $home/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 sudo -u $user nvim +'PlugInstall --sync' +qa
-sed -i '28i colorscheme vimbrant' $HOME/.config/nvim/init.vim
-sudo -u $user git clone https://github.com/ycm-core/YouCompleteMe $HOME/.config/nvim/plugged/YouCompleteMe
-cd $HOME/.config/nvim/plugged/YouCompleteMe
+sed -i '28i colorscheme vimbrant' $home/.config/nvim/init.vim
+sudo -u $user git clone https://github.com/ycm-core/YouCompleteMe $home/.config/nvim/plugged/YouCompleteMe
+cd $home/.config/nvim/plugged/YouCompleteMe
 sudo -u $user git submodule update --init --recursive
 apt install nodejs npm -y
 apt install build-essential cmake python3-dev -y
