@@ -3,12 +3,12 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'chrishunt/color-schemes', { 'do': 'mkdir colors; cp -r thayer/* colors/; cp -r railscasts/* colors/' }
 Plug 'morhetz/gruvbox'
+Plug 'jnurmine/Zenburn'
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'pangloss/vim-javascript'
-Plug 'joukevandermaas/vim-ember-hbs'
 Plug 'simeji/winresizer'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'yonchu/accelerated-smooth-scroll'
@@ -16,7 +16,11 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/syntastic'
 Plug 'pseewald/vim-anyfold'
 Plug 'ivanov/vim-ipython'
-Plug 'blakjak44/nvim'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'posva/vim-vue'
+Plug 'alvan/vim-closetag'
+"Plug 'maralla/validator.vim'
+Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
 " Unmanaged
 Plug '~/.config/nvim/plugged/YouCompleteMe'
@@ -24,8 +28,34 @@ Plug '~/.config/nvim/plugged/YouCompleteMe'
 " Initialize plugin system
 call plug#end()
 
+" Shows the highlight settings of selected word
+map <F3> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
+
+" Color/Syntax settings
 set background=dark
-let python_highlight_all = 1
+colorscheme vimbrant
+let g:semshi#excluded_hl_groups = ['local', 'builtin']
+let g:semshi#no_default_builtin_highlight = v:false
+function CustomHighlights()
+    syn keyword pythonDefinition class def nextgroup=pythonFunction skipwhite
+    hi link pythonDefinition Define
+    hi link pythonInclude Statement
+    hi link pythonExtraOperator Statement
+    hi link pythonBuiltin Number
+    hi link pythonDecoratorName Function
+    hi pythonException ctermfg=118
+    hi pythonDecorator ctermfg=81 cterm=bold
+    hi pythonExceptions ctermfg=81 cterm=italic
+    hi semshiSelf      ctermfg=208 cterm=bold
+endfunction
+autocmd FileType python call CustomHighlights()
+
+highlight Normal ctermfg=White
+highlight ColorColumn ctermbg=235 guibg=#2c2d27
+let &colorcolumn="80,".join(range(120,999),",")
+
+" Ensures syntax highlighting doesn't break
+syn sync fromstart
 
 set nu
 set mouse=a
@@ -33,10 +63,9 @@ set cursorline
 set splitbelow
 set splitright
 set backspace=indent,eol,start
-highlight Normal ctermfg=White
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
-let &colorcolumn="80,".join(range(120,999),",")
+"set autoread
 
+"let anyfold_activate=1
 set foldlevel=10
 
 " Map the leader key to SPACE
@@ -61,6 +90,7 @@ noremap <leader>m :set nu!<ENTER>
 nnoremap <leader>b i<ENTER> import ipdb; ipdb.set_trace()<ENTER><UP><ESC>0s
 
 " NERDTree mappings
+autocmd vimenter * NERDTree
 nnoremap <leader>e :NERDTreeToggle<CR>
 nnoremap <leader>E :NERDTreeTabsToggle<CR>
 nnoremap <leader>v :vs<ENTER><C-W>l
@@ -74,13 +104,12 @@ nnoremap <leader>y :tab split<ENTER>
 " Tab completion
 imap <leader><tab> <C-N>
 
+" Tag closing
+let g:closetag_filetypes = 'html,xhtml,phtml,vue'
+
 " Copy and paste to system clipboard
 vnoremap <leader>i "*y
 noremap <leader>p "*p
-
-" Smooth scroll mapping
-"noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 1)<CR>
-"noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 1)<CR>
 
 " Shift lines down by 1
 noremap U O<ESC>
@@ -102,7 +131,7 @@ nnoremap <leader>F :FormatJSON<ENTER>:%s/\s\+$//e<ENTER>
 tnoremap <Esc> <C-\><C-n>
 tnoremap <leader>k <C-\><C-W>k
 tnoremap <leader>j <C-\><C-W>
-nnoremap <C-t> :split<ENTER>:term ipython --pylab<ENTER>:resize 10<ENTER>i
+nnoremap <C-t> :split<ENTER>:term<ENTER>:resize 10<ENTER>i
 
 " Add spaces after comment delimiters by default
 "let g:NERDSpaceDelims = 1
@@ -116,6 +145,8 @@ let g:NERDCommentEmptyLines = 1
 " Align line-wise comment delimiters flush left instead of following code indentation
 let g:NERDDefaultAlign = 'left'
 
+" Ctrlp
+let g:ctrlp_working_path_mode = 'rw'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_show_hidden = 1
 let g:airline_theme = 'badwolf'
@@ -145,7 +176,15 @@ endif
 " Highlight python operators
 autocmd Filetype python syn match pythonExtraOperator     "\%([~!^&|*/%+-]\|\%(class\s*\)\@<!<<\|<=>\|<=\|\%(<\|\<class\s\+\u\w*\s*\)\@<!<[^<]\@=\|===\|==\|=\~\|>>\|>=\|=\@<!>\|\*\*\|\.\.\.\|\.\.\|::\|=\)"
 
+autocmd BufRead,BufNewFile logging.conf setf dosini
 autocmd Filetype python setlocal ts=4 sts=4 sw=4 expandtab autoindent
-autocmd Filetype javascript setlocal ts=2 sts=2 sw=2 expandtab autoindent
-autocmd Filetype handlebars setlocal ts=2 sts=2 sw=2 expandtab autoindent
-autocmd Filetype css setlocal ts=2 sts=2 sw=2 expandtab autoindent
+autocmd Filetype php setlocal ts=4 sts=4 sw=4 expandtab autoindent
+autocmd Filetype kivy setlocal ts=4 sts=4 sw=4 expandtab autoindent
+autocmd Filetype yaml setlocal ts=4 sts=4 sw=4 expandtab autoindent
+autocmd Filetype javascript setlocal ts=4 sts=4 sw=4 expandtab autoindent
+autocmd Filetype handlebars setlocal ts=4 sts=4 sw=4 expandtab autoindent
+autocmd Filetype vue setlocal ts=4 sts=4 sw=4 expandtab autoindent
+autocmd Filetype html setlocal ts=4 sts=4 sw=4 expandtab autoindent
+autocmd Filetype htmldjango setlocal ts=2 sts=2 sw=2 expandtab autoindent
+autocmd Filetype css setlocal ts=4 sts=4 sw=4 expandtab autoindent
+autocmd Filetype sql setlocal ts=2 sts=2 sw=2 expandtab autoindent
