@@ -26,7 +26,7 @@ sudo -u $user mkdir $home/.config/nvim
 sudo -u $user curl -L https://raw.githubusercontent.com/blakjak44/linux-config/master/init.vim > $home/.config/nvim/init.vim
 sudo -u $user curl -fLo $home/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 sudo -u $user nvim +'PlugInstall --sync' +qa
-sed -i '28i colorscheme vimbrant' $home/.config/nvim/init.vim
+sed -i '36i colorscheme vimbrant' $home/.config/nvim/init.vim
 sudo -u $user git clone https://github.com/ycm-core/YouCompleteMe $home/.config/nvim/plugged/YouCompleteMe
 cd $home/.config/nvim/plugged/YouCompleteMe
 sudo -u $user git submodule update --init --recursive
