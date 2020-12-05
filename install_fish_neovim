@@ -4,6 +4,8 @@
 # Specify the user to install under
 user="$1"
 
+echo Installing for user: $user
+
 # FISH
 apt-add-repository ppa:fish-shell/release-3 -y
 apt-get update
