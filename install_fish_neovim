@@ -1,5 +1,6 @@
 # This script must be run with sudo privileges
 # "python3" command must be available
+# "git" command must be available
 
 # Specify the user to install under
 user="$1"
